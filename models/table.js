@@ -1,0 +1,38 @@
+exports = module.exports = function(app, mongoose) {
+  var TableSchema = new mongoose.Schema({
+    'Breed': {type: String},
+    'Adapts Well to Apartment Living': { type: Number },
+    'Affectionate with Family': { type: Number },
+    'Amount Of Shedding': { type: Number },
+    'Dog Friendly': { type: Number },
+    'Drooling Potential': { type: Number },
+    'Easy To Groom': { type: Number },
+    'Easy To Train': { type: Number },
+    'Energy Level': { type: Number },
+    'Exercise Needs': { type: Number },
+    'Friendly Toward Strangers': { type: Number },
+    'General Health': { type: Number },
+    'Good For Novice Owners': { type: Number },
+    'Incredibly Kid Friendly Dogs': { type: Number },
+    'Intelligence': { type: Number },
+    'Intensity': { type: Number },
+    'Potential For Mouthiness': { type: Number },
+    'Potential For Playfulness': { type: Number },
+    'Potential For Weight Gain': { type: Number },
+    'Prey Drive': { type: Number },
+    'Sensitivity Level': { type: Number },
+    'Size': { type: Number },
+    'Tendency To Bark Or Howl': { type: Number },
+    'Tolerates Being Alone': { type: Number },
+    'Tolerates Cold Weather': { type: Number },
+    'Tolerates Hot Weather': { type: Number },
+    'Wanderlust Potential': { type: Number },
+    'Cardiac Frequency': { type: Number },
+    'Average Temperature': { type: Number },
+    'Weight':{ type: Number },
+    'Breaths per second': { type: Number },
+    'sick': { type: String}
+  },
+  { collection: 'data' });
+  mongoose.model('Data', TableSchema,'data');
+};
