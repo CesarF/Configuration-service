@@ -47,7 +47,7 @@ var express        = require("express"),
   allConfig.save()
 //  console.log(allConfig.header)
   var initConfig = new Config({id_config:2,
-    header:"Breed,Easy To Groom,Easy To Train,Energy Level,Exercise Needs,Friendly Toward Strangers,General Health,Weight,Breaths per second,sick"});
+    header:"Breed,Easy To Groom,Easy To Train,Energy Level,Exercise Needs,Friendly Toward Strangers,General Health,Weight,Breaths per second,sick",});
   initConfig.save()
 //  console.log(initConfig.header)
   // API routers
@@ -58,6 +58,9 @@ var express        = require("express"),
 
   data.route('/data')
     .get(ConfigCtrl.configData)
+
+  data.route('/model')
+    .get(ConfigCtrl.getModel)
 
   data.route('/modify/:columns/:dataset_id')
     .post(ConfigCtrl.modifyData)

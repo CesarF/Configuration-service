@@ -8,12 +8,29 @@ var https = require('https');
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 exports.loadData = function (req, res) {
-  getModels()
+    generateJsonValidColumns()
   //  generateJsonValidColumns();
     res.send({
        success: true,
     });
 }
+
+exports.getModel = function(req, res){
+  Config.findOne({'id_config': 2 },function (error, config) {
+     if (!config.model_id||config.model_id==0) {
+        getModels(function(last_model){
+          res.send({
+             model:last_model.id
+          });
+        });
+     }else{
+        res.send({
+           model: config.model_id
+        });
+     }
+  });
+}
+
 exports.configData = function (req, res) {
     var allData;
     var configdata;
@@ -42,7 +59,7 @@ exports.modifyData = function (req, res) {
         res.status(200);
         res.send({
             success: true,
-            header: req.params.columns, 
+            header: req.params.columns,
             dataset_id: req.params.dataset_id
         });
       });
@@ -109,12 +126,12 @@ function postModificarColumnas(jsonBody){
        else{
            console.log(body);
            console.log("CREE MODELO");
-           getModels()
+           getModels(ejecutarModel)
        }
    });
  }
 
- function getModels(){
+ function getModels(funct){
    request({
        url: 'https://ec2-52-36-54-240.us-west-2.compute.amazonaws.com:9443/api/models', //URL to hit
        method: 'GET',
@@ -134,9 +151,31 @@ function postModificarColumnas(jsonBody){
            console.log(last_model);
            console.log("MODELOS "+last_model.id);
            Config.findOne({'id_config': 2 },function (error, config) {
-              config.model = last_model.id;
-              config.save()              
+              config.model_id = last_model.id;
+              config.save();
+              funct(last_model)
            });
+       }
+   });
+ }
+
+ function ejecutarModel(model){
+   request({
+       url: 'https://ec2-52-36-54-240.us-west-2.compute.amazonaws.com:9443/api/models/'+model, //URL to hit
+       method: 'POST',
+       auth: {
+           user: 'admin',
+           password: 'admin'
+       },
+       headers: {
+           'Content-Type': 'application/json',
+           'host': 'ec2-52-36-54-240.us-west-2.compute.amazonaws.com'
+       }
+   }, function(err, response, body){
+       if(err) console.log(err);
+       else{
+           console.log(body)
+           console.log('FINISH')
        }
    });
  }
