@@ -18,34 +18,13 @@ var express        = require("express"),
   var modelTable = require('./models/table')(app, mongoose);
   var ConfigCtrl = require('./controllers/config');
   console.log('Load data')
-  var Data  = mongoose.model('Data');
 
-  /*var query =   Data.find({});
-
-  // execute the query at a later time
-  query.exec(function (err, person) {
-    console.log("here")
-    console.log(err)
-    console.log(response)
-    dat.forEach(function(obj) {
-      console.log(obj)
-    });
-  })*/
-
-  Data.find({},function (err, dat) {
-      console.log("here")
-      console.log(err)
-      console.log(dat)
-      dat.forEach(function(obj) {
-        console.log(obj)
-      });
-  }).limit(10);
 
   var Config  = mongoose.model('Config');
   console.log('Load config')
   Config.find({'id_config': 1 },function (error, response) {
         if (!error && response) {
-      //    console.log("delete 1")
+          console.log("delete 1")
           response.forEach(function(obj) {
             obj.remove(function (err) {
           // if no error, your model is removed
@@ -55,7 +34,7 @@ var express        = require("express"),
   });
   Config.find({'id_config': 2 },function (error, response) {
         if (!error && response) {
-        //  console.log("delete 2")
+          console.log("delete 2")
           response.forEach(function(obj) {
             obj.remove(function (err) {
           // if no error, your model is removed
