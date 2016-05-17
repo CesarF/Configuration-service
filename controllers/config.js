@@ -3,26 +3,15 @@ var Config  = mongoose.model('Config');
 var fs = require('fs');
 var http = require('http');
 var querystring = require('querystring');
+var request = require('request');
+var https = require('https');
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 exports.loadData = function (req, res) {
-  Config.findOne({
-    'id_config': 2
-  },'header', function (error, response) {
-        if (error || !response) {
-            res.status(404).send({
-                status: 401,
-                message: 'not found'
-            });
-        } else {
-
-        postModificarColumnas();
-
-         res.send({
-            success: true,
-            config:response
-         });
-      }
-  });
+    generateJsonValidColumns();
+    res.send({
+       success: true,
+    });
 }
 exports.configData = function (req, res) {
     var allData;
@@ -54,37 +43,41 @@ exports.modifyData = function (req, res) {
     });
 }
 
-function postModificarColumnas(){
-    // Build the post string from an object
-   var post_data = querystring.stringify({
-       'compilation_level' : 'ADVANCED_OPTIMIZATIONS',
-       'output_format': 'json',
-       'output_info': 'compiled_code',
-         'warning_level' : 'QUIET',
-         'js_code' : codestring
-   });
-
-   // An object of options to indicate where to post to
-   var post_options = {
-       host: 'https://ec2-52-36-54-240.us-west-2.compute.amazonaws.com',
-       port: '9443',
-       path: '/api/analyses/8/features',
-       method: 'POST',
-       headers: {
-           'Authorization':'Basic YWRtaW46YWRtaW4='
-           'Content-Type': 'application/json'
-       }
-   };
-
-   // Set up the request
-   var post_req = http.request(post_options, function(res) {
-       res.setEncoding('utf8');
-       res.on('data', function (chunk) {
-           console.log('Response: ' + chunk);
+function generateJsonValidColumns(){
+    Config.findOne({'id_config': 1 },'header',function (error, response) {
+       var json = []
+       var allColumns = response.header.split(",")
+       Config.findOne({'id_config': 2 },'header',function (error, response) {
+          var json = []
+          var columns = response.header.split(",")
+          allColumns.forEach(function(column){
+             var is = columns.indexOf(column)
+             var included = false
+             if(is>=0)included = true
+             json.push({"type":"CATEGORICAL","name":column,"include":included,"imputeOption":"DISCARD"})
+          });
+          console.log(json)
+          postModificarColumnas(json)
        });
-   });
+    });
+}
 
-   // post the data
-   post_req.write(post_data);
-   post_req.end();
+function postModificarColumnas(jsonBody){
+  request({
+       url: 'https://ec2-52-36-54-240.us-west-2.compute.amazonaws.com:9443/api/analyses/8/features', //URL to hit
+       method: 'POST',
+       json: jsonBody,
+       auth: {
+           user: 'admin',
+           password: 'admin'
+       },
+       headers: {
+           'Content-Type': 'application/json',
+           'host': 'ec2-52-36-54-240.us-west-2.compute.amazonaws.com'
+       }
+   }, function(err, response, body){
+       if(err) console.log(err);
+       console.log(response);
+       console.log(body);
+   });
 }
