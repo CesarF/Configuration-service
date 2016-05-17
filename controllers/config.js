@@ -8,7 +8,8 @@ var https = require('https');
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 exports.loadData = function (req, res) {
-    generateJsonValidColumns();
+  getModels()
+  //  generateJsonValidColumns();
     res.send({
        success: true,
     });
@@ -63,7 +64,7 @@ function generateJsonValidColumns(){
 }
 
 function postModificarColumnas(jsonBody){
-  request({
+   request({
        url: 'https://ec2-52-36-54-240.us-west-2.compute.amazonaws.com:9443/api/analyses/8/features', //URL to hit
        method: 'POST',
        json: jsonBody,
@@ -77,7 +78,61 @@ function postModificarColumnas(jsonBody){
        }
    }, function(err, response, body){
        if(err) console.log(err);
-       console.log(response);
-       console.log(body);
+       else{
+           console.log(body);
+           console.log("MODIFIQUE COLUMNAS");
+           postCrearModelo();
+       }
    });
-}
+ }
+
+ function postCrearModelo(){
+   var jsonBody = { "name": 'executable',  "analysisId": 8, "versionSetId": 48 };
+   request({
+       url: 'https://ec2-52-36-54-240.us-west-2.compute.amazonaws.com:9443/api/models', //URL to hit
+       method: 'POST',
+       json: jsonBody,
+       auth: {
+           user: 'admin',
+           password: 'admin'
+       },
+       headers: {
+           'Content-Type': 'application/json',
+           'host': 'ec2-52-36-54-240.us-west-2.compute.amazonaws.com'
+       }
+   }, function(err, response, body){
+       if(err) console.log(err);
+       else{
+           console.log(body);
+           console.log("CREE MODELO");
+           getModels()
+       }
+   });
+ }
+
+ function getModels(){
+   request({
+       url: 'https://ec2-52-36-54-240.us-west-2.compute.amazonaws.com:9443/api/models', //URL to hit
+       method: 'GET',
+       auth: {
+           user: 'admin',
+           password: 'admin'
+       },
+       headers: {
+           'Content-Type': 'application/json',
+           'host': 'ec2-52-36-54-240.us-west-2.compute.amazonaws.com'
+       }
+   }, function(err, response, body){
+       if(err) console.log(err);
+       else{
+           var json = JSON.parse(body)
+           var last_model = json[json.length - 1];
+           console.log(last_model);
+           console.log("MODELOS "+last_model.id);
+           Config.findOne({'id_config': 2 },function (error, config) {
+              config.model = last_model.id;
+              config.save()              
+           });
+       }
+   });
+ }
