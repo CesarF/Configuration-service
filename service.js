@@ -59,8 +59,8 @@ var express        = require("express"),
   data.route('/data')
     .get(ConfigCtrl.configData)
 
-  data.route('/modify/:columns')
-    .get(ConfigCtrl.modifyData)
+  data.route('/modify/:columns/:dataset_id')
+    .post(ConfigCtrl.modifyData)
 
   app.use('/', data);
 

@@ -32,15 +32,19 @@ exports.configData = function (req, res) {
 }
 
 exports.modifyData = function (req, res) {
-    Config.findOne({
-      'id_config': 2
-    },'header', function (error, response) {
-      response.header = req.params.columns
-      response.save()
-      res.send({
-          success: true,
+    Config.findOneAndUpdate(
+      { 'id_config': 2 },
+      { 'header': req.params.columns, 'dataset_id': req.params.dataset_id },
+      { new: true, upsert: true },
+      function(err) {
+        if(err) return res.send(500, err.message);
+        res.status(200);
+        res.send({
+            success: true,
+            header: req.params.columns, 
+            dataset_id: req.params.dataset_id
+        });
       });
-    });
 }
 
 function generateJsonValidColumns(){
