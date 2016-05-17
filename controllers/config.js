@@ -161,7 +161,7 @@ function postModificarColumnas(jsonBody){
 
  function ejecutarModel(model){
    request({
-       url: 'https://ec2-52-36-54-240.us-west-2.compute.amazonaws.com:9443/api/models/'+model, //URL to hit
+       url: 'https://ec2-52-36-54-240.us-west-2.compute.amazonaws.com:9443/api/models/'+model.id, //URL to hit
        method: 'POST',
        auth: {
            user: 'admin',
