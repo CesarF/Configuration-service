@@ -47,7 +47,7 @@ var express        = require("express"),
   allConfig.save()
 //  console.log(allConfig.header)
   var initConfig = new Config({id_config:2,
-    header:"Breed,Easy To Groom,Easy To Train,Energy Level,Exercise Needs,Friendly Toward Strangers,General Health,Weight,Breaths per second,sick",});
+    header:"Breed,Cardiac Frequency,Average Temperature,Weight,Breaths per second,Exercise Needs,sick"});
   initConfig.save()
 //  console.log(initConfig.header)
   // API routers
