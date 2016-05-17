@@ -14,38 +14,8 @@ exports.loadData = function (req, res) {
                 message: 'not found'
             });
         } else {
-          // Build the post string from an object
-         var post_data = querystring.stringify({
-             'compilation_level' : 'ADVANCED_OPTIMIZATIONS',
-             'output_format': 'json',
-             'output_info': 'compiled_code',
-               'warning_level' : 'QUIET',
-               'js_code' : codestring
-         });
 
-         // An object of options to indicate where to post to
-         var post_options = {
-             host: 'https://ec2-52-36-54-240.us-west-2.compute.amazonaws.com',
-             port: '9443',
-             path: '/api/datasets',
-             method: 'POST',
-             headers: {
-                 'Authorization':'Basic YWRtaW46YWRtaW4='
-                 'Content-Type': 'multipart/form-data'
-             }
-         };
-
-         // Set up the request
-         var post_req = http.request(post_options, function(res) {
-             res.setEncoding('utf8');
-             res.on('data', function (chunk) {
-                 console.log('Response: ' + chunk);
-             });
-         });
-
-         // post the data
-         post_req.write(post_data);
-         post_req.end();
+        postModificarColumnas();
 
          res.send({
             success: true,
@@ -82,4 +52,39 @@ exports.modifyData = function (req, res) {
           success: true,
       });
     });
+}
+
+function postModificarColumnas(){
+    // Build the post string from an object
+   var post_data = querystring.stringify({
+       'compilation_level' : 'ADVANCED_OPTIMIZATIONS',
+       'output_format': 'json',
+       'output_info': 'compiled_code',
+         'warning_level' : 'QUIET',
+         'js_code' : codestring
+   });
+
+   // An object of options to indicate where to post to
+   var post_options = {
+       host: 'https://ec2-52-36-54-240.us-west-2.compute.amazonaws.com',
+       port: '9443',
+       path: '/api/analyses/8/features',
+       method: 'POST',
+       headers: {
+           'Authorization':'Basic YWRtaW46YWRtaW4='
+           'Content-Type': 'application/json'
+       }
+   };
+
+   // Set up the request
+   var post_req = http.request(post_options, function(res) {
+       res.setEncoding('utf8');
+       res.on('data', function (chunk) {
+           console.log('Response: ' + chunk);
+       });
+   });
+
+   // post the data
+   post_req.write(post_data);
+   post_req.end();
 }
