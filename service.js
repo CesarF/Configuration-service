@@ -4,7 +4,7 @@ var express        = require("express"),
     methodOverride = require("method-override"),
     mongoose       = require('mongoose');
 
-  mongoose.connect('mongodb://54.175.183.124:27017/kml_db', function(err, res) {
+  mongoose.connect('mongodb://' + IP_MONGO + '/kml_db', function(err, res) {
     if(err) throw err;
     console.log('Connected to Database');
   });
@@ -43,13 +43,13 @@ var express        = require("express"),
         }
   });
   var allConfig = new Config({id_config:1,
-    header:"Breed,Adapts Well to Apartment Living,Affectionate with Family,Amount Of Shedding,Dog Friendly,Drooling Potential,Easy To Groom,Easy To Train,Energy Level,Exercise Needs,Friendly Toward Strangers,General Health,Good For Novice Owners,Incredibly Kid Friendly Dogs,Intelligence,Intensity,Potential For Mouthiness,Potential For Playfulness,Potential For Weight Gain,Prey Drive,Sensitivity Level,Size,Tendency To Bark Or Howl,Tolerates Being Alone,Tolerates Cold Weather,Tolerates Hot Weather,Wanderlust Potential,Cardiac Frequency,Average Temperature,Weight,Breaths per second,sick"});
+        header:"Breed,Adapts Well to Apartment Living,Affectionate with Family,Amount Of Shedding,Dog Friendly,Drooling Potential,Easy To Groom,Easy To Train,Energy Level,Exercise Needs,Friendly Toward Strangers,General Health,Good For Novice Owners,Incredibly Kid Friendly Dogs,Intelligence,Intensity,Potential For Mouthiness,Potential For Playfulness,Potential For Weight Gain,Prey Drive,Sensitivity Level,Size,Tendency To Bark Or Howl,Tolerates Being Alone,Tolerates Cold Weather,Tolerates Hot Weather,Wanderlust Potential,Cardiac Frequency,Average Temperature,Weight,Breaths per second,sick"});
   allConfig.save()
-//  console.log(allConfig.header)
+  //  console.log(allConfig.header)
   var initConfig = new Config({id_config:2,
-    header:"Breed,Cardiac Frequency,Average Temperature,Weight,Breaths per second,Exercise Needs,sick"});
+        header:"Breed,Cardiac Frequency,Average Temperature,Weight,Breaths per second,Exercise Needs,sick"});
   initConfig.save()
-//  console.log(initConfig.header)
+  //  console.log(initConfig.header)
   // API routers
   var data = express.Router();
 
@@ -69,5 +69,5 @@ var express        = require("express"),
 
   // Start Server
   app.listen(3000, function(){
-  	console.log("Server runing on http://localhost:3000");
+  	console.log("Server running on http://localhost:3000");
   })
