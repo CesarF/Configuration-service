@@ -86,7 +86,7 @@ function generateJsonValidColumns(){
 
 function postModificarColumnas(jsonBody){
    request({
-       url: 'https://ec2-52-36-54-240.us-west-2.compute.amazonaws.com:9443/api/analyses/8/features', //URL to hit
+       url: URL_API+'/api/analyses/8/features', //URL to hit
        method: 'POST',
        json: jsonBody,
        auth: {
@@ -95,7 +95,7 @@ function postModificarColumnas(jsonBody){
        },
        headers: {
            'Content-Type': 'application/json',
-           'host': 'ec2-52-36-54-240.us-west-2.compute.amazonaws.com'
+           'host': HOST
        }
    }, function(err, response, body){
        if(err) console.log(err);
@@ -110,7 +110,7 @@ function postModificarColumnas(jsonBody){
  function postCrearModelo(){
    var jsonBody = { "name": 'executable',  "analysisId": 8, "versionSetId": 48 };
    request({
-       url: 'https://ec2-52-36-54-240.us-west-2.compute.amazonaws.com:9443/api/models', //URL to hit
+       url: URL_API'/api/models', //URL to hit
        method: 'POST',
        json: jsonBody,
        auth: {
@@ -119,7 +119,7 @@ function postModificarColumnas(jsonBody){
        },
        headers: {
            'Content-Type': 'application/json',
-           'host': 'ec2-52-36-54-240.us-west-2.compute.amazonaws.com'
+           'host': HOST
        }
    }, function(err, response, body){
        if(err) console.log(err);
@@ -133,7 +133,7 @@ function postModificarColumnas(jsonBody){
 
  function getModels(funct){
    request({
-       url: 'https://ec2-52-36-54-240.us-west-2.compute.amazonaws.com:9443/api/models', //URL to hit
+       url: URL_HIT+'/api/models', //URL to hit
        method: 'GET',
        auth: {
            user: 'admin',
@@ -141,7 +141,7 @@ function postModificarColumnas(jsonBody){
        },
        headers: {
            'Content-Type': 'application/json',
-           'host': 'ec2-52-36-54-240.us-west-2.compute.amazonaws.com'
+           'host': HOST
        }
    }, function(err, response, body){
        if(err) console.log(err);
@@ -161,7 +161,7 @@ function postModificarColumnas(jsonBody){
 
  function ejecutarModel(model){
    request({
-       url: 'https://ec2-52-36-54-240.us-west-2.compute.amazonaws.com:9443/api/models/'+model.id, //URL to hit
+       url: URL_API+'/api/models/'+model.id, //URL to hit
        method: 'POST',
        auth: {
            user: 'admin',
@@ -169,7 +169,7 @@ function postModificarColumnas(jsonBody){
        },
        headers: {
            'Content-Type': 'application/json',
-           'host': 'ec2-52-36-54-240.us-west-2.compute.amazonaws.com'
+           'host': HOST
        }
    }, function(err, response, body){
        if(err) console.log(err);
